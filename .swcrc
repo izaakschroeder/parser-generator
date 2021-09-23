@@ -1,0 +1,23 @@
+{
+  "jsc": {
+    "parser": {
+      "syntax": "typescript",
+      "tsx": true,
+      "dynamicImport": false,
+      "importAssertions": false
+    },
+    "transform": null,
+    "target": "es2020",
+    "loose": false,
+    "externalHelpers": false,
+    "keepClassNames": false
+  },
+  "module": {
+    "type": "commonjs",
+    "strict": false,
+    "strictMode": true,
+    "lazy": false,
+    "noInterop": false
+  },
+  "sourceMaps": "inline"
+}
