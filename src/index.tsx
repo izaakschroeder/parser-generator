@@ -5,3 +5,5 @@ export * from './NonTerminal';
 export * from './Production';
 export * from './generateStates';
 export * from './generateTables';
+export * from './Parser';
+export * from './Tables';

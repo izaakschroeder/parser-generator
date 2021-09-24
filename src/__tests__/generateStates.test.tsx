@@ -49,27 +49,29 @@ describe('generateStates', () => {
 
     const tables = generateTables(grammar, states, actions);
 
+    console.log(tables.actionTable);
+
     const parser = new Parser({
       actionTable: tables.actionTable,
       gotoTable: tables.gotoTable,
       productionTable: tables.productionTable,
       endOfInput: Grammar.endOfInput.id,
       onReduce: (lhs, rhs) => {
-        console.log(grammar.productions[lhs].leftHandSide.id, '->', rhs);
+        // console.log(grammar.productions[lhs].leftHandSide.id, '->', rhs);
       },
     });
-    parser.write({getTokenId: () => symbols.lbr.id});
-    parser.write({getTokenId: () => symbols.exl.id});
-    parser.write({getTokenId: () => symbols.str.id});
-    parser.write({getTokenId: () => symbols.qus.id});
-    parser.write({getTokenId: () => symbols.str.id});
-    parser.write({getTokenId: () => symbols.rbr.id});
-    parser.write({getTokenId: () => symbols.exl.id});
-    parser.write({getTokenId: () => symbols.str.id});
-    parser.write({getTokenId: () => symbols.exl.id});
-    parser.write({getTokenId: () => symbols.str.id});
-    parser.write({getTokenId: () => symbols.qus.id});
-    parser.write({getTokenId: () => symbols.str.id});
+    parser.write(symbols.lbr.id);
+    parser.write(symbols.exl.id);
+    parser.write(symbols.str.id);
+    parser.write(symbols.qus.id);
+    parser.write(symbols.str.id);
+    parser.write(symbols.rbr.id);
+    parser.write(symbols.exl.id);
+    parser.write(symbols.str.id);
+    parser.write(symbols.exl.id);
+    parser.write(symbols.str.id);
+    parser.write(symbols.qus.id);
+    parser.write(symbols.str.id);
     parser.end();
   });
 });

@@ -3,6 +3,7 @@ import {
   GotoTable,
   isReduceAction,
   isShiftAction,
+  isSingleAction,
   ProductionTable,
   ReduceAction,
   ShiftAction,
@@ -10,9 +11,11 @@ import {
   SymbolId,
 } from './Tables';
 
-interface Input {
-  getTokenId(): string;
+interface ObjectInput {
+  getTokenId(): SymbolId;
 }
+
+type Input = ObjectInput | SymbolId;
 
 interface Reduction {
   leftHandSide: SymbolId;
@@ -42,7 +45,7 @@ export class Parser {
   private gotoTable: GotoTable;
   private productionTable: ProductionTable;
   private endOfInput: SymbolId;
-  stack!: StackEntry[];
+  private stack!: StackEntry[];
   initialState = 0;
 
   onReduce: (prodId: number, rhs: Data) => unknown;
@@ -65,21 +68,20 @@ export class Parser {
   }
 
   write(input: Input) {
-    const lookahead = input.getTokenId();
+    const lookahead = typeof input === 'string' ? input : input.getTokenId();
     do {
       const top = this.peek();
-      const actions = this.actionTable[top.nextState][lookahead];
+      const action = this.actionTable[top.nextState][lookahead];
 
-      if (!actions || actions.length === 0) {
+      if (action === undefined) {
         throw new Error(
           `Invalid input; given: ${lookahead}, expected: ${this.expects()}.`,
         );
       }
-      if (actions.length > 1) {
-        throw new Error('Ambiguous state.');
+      if (!isSingleAction(action)) {
+        throw new Error(`Ambiguous state, ${JSON.stringify(action)}.`);
       }
 
-      const action = actions[0];
       if (isShiftAction(action)) {
         this.shift(action, input);
         return;
@@ -95,9 +97,7 @@ export class Parser {
   }
 
   end() {
-    this.write({
-      getTokenId: () => this.endOfInput,
-    });
+    this.write(this.endOfInput);
   }
 
   peek() {
@@ -105,14 +105,14 @@ export class Parser {
   }
 
   private shift([nextState]: ShiftAction, input: Input) {
-    const stackEntry = new StackEntry(input, input.getTokenId(), nextState);
+    const lookahead = typeof input === 'string' ? input : input.getTokenId();
+    const stackEntry = new StackEntry(input, lookahead, nextState);
     this.stack.push(stackEntry);
   }
 
-  private reduce(action: ReduceAction, input: Input) {
+  private reduce(action: ReduceAction, _input: Input) {
     var rhs: Data = [];
     var [lhs, len] = this.productionTable[action];
-    //Loop through the right hand side of the production
     for (var i = 0; i < len; ++i) {
       const top = this.stack.pop();
       const item = top.data;

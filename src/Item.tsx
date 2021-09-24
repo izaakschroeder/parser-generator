@@ -28,13 +28,13 @@ export class Item {
     if (!this.isReduction() || !item.isReduction()) return false;
 
     return (
-      this.production.leftHandSide !== item.production.leftHandSide &&
+      !this.production.leftHandSide.equals(item.production.leftHandSide) &&
       this.lookahead.equals(item.lookahead) &&
       symbolArrayEquals(
         this.production.rightHandSide,
         item.production.rightHandSide,
       ) &&
-      this.dotPosition == item.dotPosition
+      this.dotPosition === item.dotPosition
     );
   }
 

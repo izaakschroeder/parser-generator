@@ -11,6 +11,7 @@ import {
   ActionTableEntry,
   GotoTable,
   GotoTableEntry,
+  isSingleAction,
   ProductionTable,
   StateId,
   SymbolId,
@@ -28,16 +29,21 @@ function addAction(
   lookahead: SymbolId,
   action: TableAction,
 ) {
-  if (!entry[lookahead]) {
-    entry[lookahead] = [];
+  const existingAction = entry[lookahead];
+  if (!existingAction) {
+    entry[lookahead] = action;
+    return;
+  } else if (isEqual(existingAction, action)) {
+    return;
   }
 
-  const actionExists = entry[lookahead].some((entry) => {
-    return action === entry || isEqual(action, entry);
-  });
+  const actions: TableAction[] = isSingleAction(existingAction)
+    ? (entry[lookahead] = [existingAction])
+    : existingAction;
 
+  const actionExists = actions.some((entry) => isEqual(action, entry));
   if (!actionExists) {
-    entry[lookahead].push(action);
+    actions.push(action);
   }
 }
 
