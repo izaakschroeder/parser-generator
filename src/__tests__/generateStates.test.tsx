@@ -57,21 +57,21 @@ describe('generateStates', () => {
       productionTable: tables.productionTable,
       endOfInput: Grammar.endOfInput.id,
       onReduce: (lhs, rhs) => {
-        // console.log(grammar.productions[lhs].leftHandSide.id, '->', rhs);
+        console.log(`reduce: ${grammar.productions[lhs]}`);
       },
     });
-    parser.write(symbols.lbr.id);
-    parser.write(symbols.exl.id);
-    parser.write(symbols.str.id);
-    parser.write(symbols.qus.id);
-    parser.write(symbols.str.id);
-    parser.write(symbols.rbr.id);
-    parser.write(symbols.exl.id);
-    parser.write(symbols.str.id);
-    parser.write(symbols.exl.id);
-    parser.write(symbols.str.id);
-    parser.write(symbols.qus.id);
-    parser.write(symbols.str.id);
+    parser.write(symbols.lbr);
+    parser.write(symbols.exl);
+    parser.write(symbols.str);
+    parser.write(symbols.qus);
+    parser.write(symbols.str);
+    parser.write(symbols.rbr);
+    parser.write(symbols.exl);
+    parser.write(symbols.str);
+    parser.write(symbols.exl);
+    parser.write(symbols.str);
+    parser.write(symbols.qus);
+    parser.write(symbols.str);
     parser.end();
   });
 });

@@ -21,4 +21,10 @@ export class Production {
     }
     return true;
   }
+
+  toString() {
+    const lhs = this.leftHandSide.toString();
+    const rhs = this.rightHandSide.map((x) => x.toString()).join(' ');
+    return `${lhs} -> ${rhs}`;
+  }
 }

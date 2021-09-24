@@ -26,9 +26,12 @@ export const disambiguateTables = (actionTable: ActionTable) => {
     const newEntry = {...entry};
     for (const lookahead in entry) {
       const actions = entry[lookahead];
-      if (!actions || isSingleAction(actions)) {
+      if (isSingleAction(actions)) {
         continue;
       }
+      // Take cross-product of actions.
+      // Eliminate.
+      // Repeat?
       // Pick a winner.
       newEntry[lookahead] = actions[0];
     }
